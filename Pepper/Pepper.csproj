@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DeepBlue, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Assemblies\DeepBlue.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\EntityFramework.4.1.10331.0\lib\EntityFramework.dll</HintPath>
@@ -208,12 +212,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_sideBarLayout.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\DeepBlue\DeepBlue\DeepBlue.csproj">
-      <Project>{29CF30A7-AD06-46A1-87F3-2FBEED1FCA1F}</Project>
-      <Name>DeepBlue</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Fund\_investors.cshtml" />
