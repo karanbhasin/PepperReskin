@@ -1,0 +1,29 @@
+﻿<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <link href="@Url.Content("~/assets/default/css/master.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/assets/default/css/application.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/assets/default/js/jquery-1.7.1.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/assets/default/js/application.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/assets/default/js/dropdown.js")" type="text/javascript"></script>
+<script language="javascript">
+    $(document).ready(function () {
+        Pepper.go();
+        Pepper.Widget.init();
+    });
+</script>
+</head>
+<body>
+<div class="container">
+    @Html.Partial("_menu")
+      <div class="row">
+        <div class="span11">
+            @RenderBody()
+        </div>
+        <div class="span5 columns sidebar" id="sidebar">
+           @RenderSection("SideBar", false)
+        </div>
+      </div>
+</div>
+</body>
+</html>

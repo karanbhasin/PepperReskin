@@ -1,0 +1,104 @@
+﻿@model List<DeepBlue.Models.Entity.CapitalCall>
+
+<div id="fund_capitalcalls" class="widget_body">
+        @if (Model.Count == 0) {
+        <div class="gutter_top_normalize" id="no_groups" style="display: none;">
+           No capital calls have yet been added. You can <a href="#add_to_group" id="" onclick="IndividualDetail.ToggleAddToGroup();return false;">
+                add one</a> now.
+        </div>
+        } else {
+        <!-- Chart for capital calls-->
+          <div id="capitalcalls_chart"></div>
+            System.Collections.Hashtable mod = new System.Collections.Hashtable();
+            mod.Add("UniqueIdentifier", "cc");
+            mod.Add("Container", "capitalcalls_chart");
+            decimal totalCapitalAmountCalled = 0;
+            decimal restCapitalAmountCalled = 0;
+            int investorCount = 0;
+            System.Text.StringBuilder amtBuilder = new System.Text.StringBuilder();
+            System.Text.StringBuilder capitalCallNumbers = new System.Text.StringBuilder();
+            System.Text.StringBuilder restcapitalCallNumbers = new System.Text.StringBuilder();
+            for (int i = 0; i < Model.Count; i++) {
+                totalCapitalAmountCalled += Model[i].CapitalAmountCalled;
+                if (investorCount >= 10) {
+                    restCapitalAmountCalled += Model[i].CapitalAmountCalled;
+                    restcapitalCallNumbers.Append("\"%%.%% – ").Append(Model[i].CapitalCallNumber).Append("\",");
+                } else {
+                    amtBuilder.Append(Model[i].CapitalAmountCalled).Append(",");
+                    capitalCallNumbers.Append("\"%%.%% – ").Append(Model[i].CapitalCallNumber).Append("\",");
+                }
+                investorCount++;
+            }
+
+            if (investorCount >= 10) {
+                amtBuilder.Append(restCapitalAmountCalled).Append(",");
+                capitalCallNumbers.Append("\"%%.%% – ").Append("Rest").Append("\",");
+            }
+
+            string cData = amtBuilder.ToString();
+            string invNames = capitalCallNumbers.ToString();
+            if (cData.Length > 0) {
+                cData = cData.Substring(0, cData.Length - 1);
+                invNames = invNames.Substring(0, invNames.Length - 1);
+            }
+            mod.Add("PieData", cData);
+            mod.Add("PieLegend", invNames);
+         
+            @Html.Partial("_pieChart", @mod)
+        
+        <!-- End Chart for capital calls -->
+        <div id="capitalcalls" class="gutter_top_normalize">
+            <table id="" class="grid gutter_bottom_none" style="">
+                <thead>
+                    <tr class="zebra">
+                        <th class="shrink">
+                          Number
+                        </th>
+                        <th class="shrink">
+                            Amount
+                        </th>
+                        <th class="shrink">
+                           Mgmt fees
+                        </th>
+                        <th class="shrink">
+                           Fund expenses
+                        </th>
+                        <th class="shrink">
+                          Capital call date
+                        </th>
+                        <th class="shrink">
+                           Due date
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="groups_tbody">
+                    @foreach (DeepBlue.Models.Entity.CapitalCall capitalCall in Model) {
+                    <tr id="group_1" class="align_middle">
+                        <td>
+                            <a href="/Groups/GroupMember/Index.aspx?groupID=1&groupMemberID=7878819&page=1" class="bold">
+                               #@capitalCall.CapitalCallNumber</a>
+                            <br />
+                            <small></small>
+                        </td>
+                        <td class="shrink">
+                            @Pepper.Helpers.FormatHelper.CurrencyFormat(@capitalCall.CapitalAmountCalled)
+                        </td>
+                        <td class="shrink align_center">
+                            @Pepper.Helpers.FormatHelper.CurrencyFormat(@capitalCall.ManagementFees)
+                        </td>
+                         <td class="shrink align_center">
+                             @Pepper.Helpers.FormatHelper.CurrencyFormat(@capitalCall.FundExpenses)
+                        </td>
+                         <td class="shrink align_center">
+                            @capitalCall.CapitalCallDate.ToNeutralShortDate()
+                        </td>
+                         <td class="shrink align_center">
+                            @capitalCall.CapitalCallDueDate.ToNeutralShortDate()
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
+</div>

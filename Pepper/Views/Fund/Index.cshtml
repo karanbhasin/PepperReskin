@@ -1,0 +1,100 @@
+﻿@model List<Pepper.ViewModels.Fund.FundIndexModel>
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<div class="section_header">
+    <span class="section_header_left"></span><span class="float_left">Find a Person</span>
+    <span class="section_header_right"></span>
+</div>
+<div class="section">
+    <div class="box">
+        <form id="frmFindByName" method="get" action="/Groups/Group/View.aspx?ID=184666&page=1&search_context=0"
+        onsubmit="return false;">
+        <p class="form_element">
+            <label for="txtFindWithinGroup" class="bold">
+                Find someone by typing their name</label>
+            <input type="text" id="txtFindWithinGroup" name="txtFindWithinGroup" autocomplete="off"
+                class="xlarge" />
+        </p>
+        </form>
+    </div>
+   <a href="/People/Family/New.aspx" class="add float_right">Add a Fund</a>
+    <div>
+        <table class="grid" cellspacing="0" border="0" id="ctl00_ctl00_MainContent_content_grdIndividuals"
+            style="border-width: 0px; border-collapse: collapse;">
+            <tr>
+                <th scope="col">
+                    Name
+                </th>
+                <th scope="col">
+                   Tax ID
+                </th>
+                <th scope="col">
+                    Committed Amount
+                </th>
+                <th scope="col">
+                    Unfunded
+                </th>
+                <th class="gear_column shrink" scope="col">
+                <a href="#add_to_group" id="lnk_add_to_group">
+                        <img src="/assets/default/img/icon_plus.png?201226_16-26"
+                            alt="Add an investor" width="16" height="16" />
+                    </a>
+                </th>
+            </tr>
+            @foreach (Pepper.ViewModels.Fund.FundIndexModel fi in Model) {
+            <tr class="vcard">
+                    <td class="nowrap">
+                        <a href="#" class="fn n bold"
+                            title="">@fi.FundName</a>
+                        @if (fi.InceptionDate.HasValue) {
+                         <br />
+                         <small>inception on @fi.InceptionDate.Value.ToNeutralShortDate()
+                         </small>
+                        } 
+                        @if (fi.ScheduleTerminationDate.HasValue) {
+                             <br />
+                         <small>scheduled termination on 
+                         @fi.ScheduleTerminationDate.Value.ToNeutralShortDate()
+                         </small>
+                        } 
+                    </td>
+                    <td>
+                       @fi.TaxId
+                    </td>
+                    <td>
+                    @if (fi.CommitmentAmount.HasValue) {
+                         @Pepper.Helpers.FormatHelper.CurrencyFormat( @fi.CommitmentAmount.Value)
+                    } else {
+                        <span class="mute">–</span>
+                    }
+                    </td>
+                    <td>
+                         @if (fi.UnfundedAmount.HasValue) {
+                         @Pepper.Helpers.FormatHelper.CurrencyFormat( @fi.UnfundedAmount.Value)
+                    } else {
+                        <span class="mute">–</span>
+                    }
+                    </td>
+                    <td class="shrink">
+                        <a href="#" class="gear_trigger" onclick="return false;">Options</a>
+                        <ul class="grid_menu" style="display: none">
+                            <li><a href="/People/Family/Index.aspx?id=4043165" class="view_household"><span>View
+                                household</span></a> </li>
+                            <li><a href="/people/Individual/Index.aspx?id=5160407&amp;hsd=4043165" class="view_individual">
+                                <span>View individual</span></a> </li>
+                            <li><a href="/People/Individual/Edit.aspx?IndID=5160407&amp;HsdID=4043165&amp;source=SEARCHLISTPROXY"
+                                class="edit_individual"><span>Edit individual</span></a> </li>
+                            <li><a href="/Bridge/Giving/ContributorDetails/5160407" class="view_results"><span>View
+                                contributions</span></a></li>
+                            <li><a href="/people/ContactForm/Select.aspx?HouseholdID=4043165&amp;IndividualID=5160407&amp;Source=SEARCHLISTPROXY&amp;AllowRedirect=True"
+                                class="new_contact"><span>Enter a contact form</span></a> </li>
+                        </ul>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

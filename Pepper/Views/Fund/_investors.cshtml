@@ -1,0 +1,129 @@
+﻿@model List<Pepper.ViewModels.Fund.InvestorFundViewModel>
+@helper GetChartData(List<Pepper.ViewModels.Fund.InvestorFundViewModel> investors) {
+    decimal totalInvestorCommitment = 0;
+    decimal restInvestorCommitment = 0;
+    int investorCount = 0;
+    System.Text.StringBuilder amtBuilder = new System.Text.StringBuilder();
+    System.Text.StringBuilder investorNames = new System.Text.StringBuilder();
+    System.Text.StringBuilder restInvestorNames = new System.Text.StringBuilder();
+    for(int i =0; i< investors.Count; i++){
+        totalInvestorCommitment += investors[i].CommittedAmount;
+        if(investorCount >= 10){
+            restInvestorCommitment += investors[i].CommittedAmount;
+            restInvestorNames.Append("\"%%.%% – ").Append(investors[i].InvestorName).Append("\",");
+        }else {
+            amtBuilder.Append(investors[i].CommittedAmount).Append(",");
+            investorNames.Append("\"%%.%% – ").Append(investors[i].InvestorName).Append("\",");
+        }
+        investorCount++;
+    }
+    
+    if(investorCount>=10){
+        amtBuilder.Append(restInvestorCommitment).Append(",");
+        investorNames.Append("\"%%.%% – ").Append("Rest").Append("\",");
+    }
+
+    string cData = amtBuilder.ToString();
+    string invNames = investorNames.ToString();
+    if(cData.Length > 0){
+        cData = cData.Substring(0, cData.Length - 1);
+        invNames = invNames.Substring(0, invNames.Length - 1);
+    }
+    
+    @:pieData = [@cData];
+    @:pieLegend = [@(new HtmlString(invNames))];
+	//@:pieLegend = [@(new HtmlString(invNames))];
+    //  @:Plain Text is @bar
+}
+<div id="fund_investors" class="widget_body">
+        @if (Model.Count == 0) {
+        <div class="gutter_top_normalize" id="no_groups" style="display: none;">
+           No investors have yet been added. You can <a href="#add_to_group" id="" onclick="IndividualDetail.ToggleAddToGroup();return false;">
+                add one</a> now.
+        </div>
+        } else {
+        <!-- Chart -->
+           <div id="investors_chart"></div>
+            System.Collections.Hashtable mod = new System.Collections.Hashtable();
+            mod.Add("UniqueIdentifier", "ic");
+            mod.Add("Container", "investors_chart");
+            decimal totalInvestorCommitment = 0;
+            decimal restInvestorCommitment = 0;
+            int investorCount = 0;
+            System.Text.StringBuilder amtBuilder = new System.Text.StringBuilder();
+            System.Text.StringBuilder investorNames = new System.Text.StringBuilder();
+            System.Text.StringBuilder restInvestorNames = new System.Text.StringBuilder();
+            for (int i = 0; i < Model.Count; i++) {
+                totalInvestorCommitment += Model[i].CommittedAmount;
+                if (investorCount >= 10) {
+                    restInvestorCommitment += Model[i].CommittedAmount;
+                    restInvestorNames.Append("\"%%.%% – ").Append(Model[i].InvestorName).Append("\",");
+                } else {
+                    amtBuilder.Append(Model[i].CommittedAmount).Append(",");
+                    investorNames.Append("\"%%.%% – ").Append(Model[i].InvestorName).Append("\",");
+                }
+                investorCount++;
+            }
+
+            if (investorCount >= 10) {
+                amtBuilder.Append(restInvestorCommitment).Append(",");
+                investorNames.Append("\"%%.%% – ").Append("Rest").Append("\",");
+            }
+
+            string cData = amtBuilder.ToString();
+            string invNames = investorNames.ToString();
+            if (cData.Length > 0) {
+                cData = cData.Substring(0, cData.Length - 1);
+                invNames = invNames.Substring(0, invNames.Length - 1);
+            }
+            mod.Add("PieData", cData);
+            mod.Add("PieLegend", invNames);
+         
+            @Html.Partial("_pieChart", @mod)
+        
+        <!-- End Chart -->
+        <div id="groups" class="gutter_top_normalize">
+            <table id="" class="grid gutter_bottom_none" style="">
+                <thead>
+                    <tr class="zebra">
+                        <th class="shrink">
+                          Investor
+                        </th>
+                        <th class="shrink">
+                            Committed
+                        </th>
+                        <th class="shrink">
+                            Unfunded
+                        </th>
+                        <th class="shrink">
+                           Closed on
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="groups_tbody">
+                    @foreach (Pepper.ViewModels.Fund.InvestorFundViewModel investor in Model) {
+                    <tr id="group_1" class="align_middle">
+                        <td class="nowrap">
+                            <a href="/Groups/GroupMember/Index.aspx?groupID=1&groupMemberID=7878819&page=1" class="bold">
+                               @investor.InvestorName</a>
+                            <br />
+                            <small></small>
+                        </td>
+                        <td class="shrink">
+                            @investor.CommittedAmount
+                        </td>
+                        <td class="shrink align_center">
+                            @investor.UnfundedAmount
+                        </td>
+                        <td class="shrink align_center">
+                        @if (investor.ClosedDate != null) {
+                           @investor.ClosedDate.Value.ToNeutralShortDate()
+                        } 
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
+</div>

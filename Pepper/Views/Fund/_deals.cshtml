@@ -1,0 +1,100 @@
+﻿@model List<DeepBlue.Models.Deal.DealReportModel>
+<div id="fund_deals" class="widget_body">
+        @if (Model.Count == 0) {
+        <div class="gutter_top_normalize" id="no_groups" style="display: none;">
+           No deals have yet been added. You can <a href="#add_to_group" id="" onclick="IndividualDetail.ToggleAddToGroup();return false;">
+                add one</a> now.
+        </div>
+        } else {
+            <!-- Chart for deals-->
+          <div id="deals_chart"></div>
+            System.Collections.Hashtable mod = new System.Collections.Hashtable();
+            mod.Add("UniqueIdentifier", "dc");
+            mod.Add("Container", "deals_chart");
+            decimal totalInvestorCommitment = 0;
+            decimal restInvestorCommitment = 0;
+            int investorCount = 0;
+            System.Text.StringBuilder amtBuilder = new System.Text.StringBuilder();
+            System.Text.StringBuilder investorNames = new System.Text.StringBuilder();
+            System.Text.StringBuilder restInvestorNames = new System.Text.StringBuilder();
+            for (int i = 0; i < Model.Count; i++) {
+                if (Model[i].NetPurchasePrice.HasValue) {
+                    totalInvestorCommitment += Model[i].NetPurchasePrice.Value;
+                }
+                if (investorCount >= 10) {
+                    if( Model[i].NetPurchasePrice.HasValue){
+                    restInvestorCommitment += Model[i].NetPurchasePrice.Value;
+                    restInvestorNames.Append("\"%%.%% – ").Append(Model[i].DealName).Append("\",");
+                    }
+                } else {
+                    if( Model[i].NetPurchasePrice.HasValue){
+                    amtBuilder.Append(Model[i].NetPurchasePrice.Value).Append(",");
+                    investorNames.Append("\"%%.%% – ").Append(Model[i].DealName).Append("\",");
+                    }
+                }
+                investorCount++;
+            }
+
+            if (investorCount >= 10) {
+                amtBuilder.Append(restInvestorCommitment).Append(",");
+                investorNames.Append("\"%%.%% – ").Append("Rest").Append("\",");
+            }
+
+            string cData = amtBuilder.ToString();
+            string invNames = investorNames.ToString();
+            if (cData.Length > 0) {
+                cData = cData.Substring(0, cData.Length - 1);
+                invNames = invNames.Substring(0, invNames.Length - 1);
+            }
+            mod.Add("PieData", cData);
+            mod.Add("PieLegend", invNames);
+         
+            @Html.Partial("_pieChart", @mod)
+        
+        <!-- End Chart -->
+        <div id="deals" class="gutter_top_normalize">
+            <table id="" class="grid gutter_bottom_none" style="">
+                <thead>
+                    <tr class="zebra">
+                        <th>
+                            Name
+                        </th>
+                        <th class="shrink">
+                           Net Purchase Price
+                        </th>
+                        <th class="shrink">
+                           Gross Purchase Price
+                        </th>
+                        <th class="shrink">
+                           Committed Amount
+                        </th>
+                       
+                    </tr>
+                </thead>
+                <tbody id="groups_tbody">
+                    @foreach (DeepBlue.Models.Deal.DealReportModel deal in Model) {
+                    <tr id="deal_@deal.DealId" class="align_middle">
+                        <td class="nowrap">
+                            <a href="/Groups/GroupMember/Index.aspx?groupID=1&groupMemberID=7878819&page=1" class="bold">
+                               #@deal.DealNumber</a>&nbsp;
+                                @deal.DealName
+                                <br/>
+                                <small>@deal.DealDate.ToNeutralShortDate()</small>
+                        </td>
+                        <td class="shrink align_center">
+                             @Pepper.Helpers.FormatHelper.CurrencyFormat(@deal.NetPurchasePrice)
+                        </td>
+                         <td class="shrink align_center">
+                            @Pepper.Helpers.FormatHelper.CurrencyFormat(@deal.GrossPurchasePrice)
+                        </td>
+                         <td class="shrink align_center">
+                            @Pepper.Helpers.FormatHelper.CurrencyFormat(@deal.CommittedAmount)
+                        </td>
+                        
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
+</div>

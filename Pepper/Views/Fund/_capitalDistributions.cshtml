@@ -1,0 +1,115 @@
+﻿@model List<DeepBlue.Models.Entity.CapitalDistribution>
+<div id="fund_capitaldistributions" class="widget_body">
+        @if (Model.Count == 0) {
+        <div class="gutter_top_normalize" id="no_groups" style="display: none;">
+           No capital distributions have yet been added. You can <a href="#add_to_group" id="" onclick="IndividualDetail.ToggleAddToGroup();return false;">
+                add one</a> now.
+        </div>
+        } else {
+             <!-- Chart for capital distributions-->
+          <div id="capitaldists_chart"></div>
+            System.Collections.Hashtable mod = new System.Collections.Hashtable();
+            mod.Add("UniqueIdentifier", "cd");
+            mod.Add("Container", "capitaldists_chart");
+            decimal totalCapitalDistribution = 0;
+            decimal restCapitalDistribution = 0;
+            int investorCount = 0;
+            System.Text.StringBuilder amtBuilder = new System.Text.StringBuilder();
+            System.Text.StringBuilder capitalDistributionNumbers = new System.Text.StringBuilder();
+            System.Text.StringBuilder restcapitalDistributionNumbers = new System.Text.StringBuilder();
+            for (int i = 0; i < Model.Count; i++) {
+                totalCapitalDistribution += Model[i].DistributionAmount;
+                if (investorCount >= 10) {
+                    restCapitalDistribution += Model[i].DistributionAmount;
+                    restcapitalDistributionNumbers.Append("\"%%.%% – ").Append(Model[i].DistributionNumber).Append("\",");
+                } else {
+                    amtBuilder.Append(Model[i].DistributionAmount).Append(",");
+                    capitalDistributionNumbers.Append("\"%%.%% – ").Append(Model[i].DistributionNumber).Append("\",");
+                }
+                investorCount++;
+            }
+
+            if (investorCount >= 10) {
+                amtBuilder.Append(restCapitalDistribution).Append(",");
+                capitalDistributionNumbers.Append("\"%%.%% – ").Append("Rest").Append("\",");
+            }
+
+            string cData = amtBuilder.ToString();
+            string invNames = capitalDistributionNumbers.ToString();
+            if (cData.Length > 0) {
+                cData = cData.Substring(0, cData.Length - 1);
+                invNames = invNames.Substring(0, invNames.Length - 1);
+            }
+            mod.Add("PieData", cData);
+            mod.Add("PieLegend", invNames);
+         
+            @Html.Partial("_pieChart", @mod)
+        
+        <!-- End Chart for capital distributions -->
+        <div id="capitaldistributions" class="gutter_top_normalize">
+            <table id="" class="grid gutter_bottom_none" style="">
+                <thead>
+                    <tr class="zebra">
+                        <th>
+                          Number
+                        </th>
+                        <th class="shrink">
+                          Amount
+                        </th>
+                        <th class="shrink">
+                           Mgmt fees
+                        </th>
+                        <th class="shrink">
+                           Fund expenses
+                        </th>
+                         <th class="shrink">
+                          Profit return
+                        </th>
+                        <th class="shrink">
+                          Cost return
+                        </th>
+                        <th class="shrink">
+                          Distribution date
+                        </th>
+                        <th class="shrink">
+                           Due date
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="groups_tbody">
+                    @foreach (DeepBlue.Models.Entity.CapitalDistribution capitalDist in Model) {
+                    <tr id="group_1" class="align_middle">
+                        <td>
+                            <a href="/Groups/GroupMember/Index.aspx?groupID=1&groupMemberID=7878819&page=1" class="bold">
+                               @capitalDist.DistributionNumber</a>
+                            <br />
+                            <small></small>
+                        </td>
+                        <td class="shrink">
+                            @Pepper.Helpers.FormatHelper.CurrencyFormat( @capitalDist.DistributionAmount)
+                        </td>
+                        <td class="shrink align_center">
+                            @Pepper.Helpers.FormatHelper.CurrencyFormat( @capitalDist.ReturnManagementFees)
+                        </td>
+                         <td class="shrink align_center">
+                             @Pepper.Helpers.FormatHelper.CurrencyFormat(@capitalDist.ReturnFundExpenses)
+                        </td>
+                         <td class="shrink align_center">
+                             @Pepper.Helpers.FormatHelper.CurrencyFormat(@capitalDist.PreferredReturn)
+                        </td>
+                         <td class="shrink align_center">
+                             @Pepper.Helpers.FormatHelper.CurrencyFormat(@capitalDist.CapitalReturn)
+                        </td>
+                         <td class="shrink align_center">
+                            @capitalDist.CapitalDistributionDate.ToNeutralShortDate()
+                        </td>
+                         <td class="shrink align_center">
+                            @capitalDist.CapitalDistributionDueDate.ToNeutralShortDate()
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
+</div>

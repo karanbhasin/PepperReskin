@@ -1,0 +1,64 @@
+﻿@model Pepper.Areas.Public.ViewModels.LogOnModel
+
+@{
+    ViewBag.Title = "Login";
+}
+
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="span8 offset4">
+                <div class="clearfix">
+                    <h1 id="flat-logo">
+                        <a href="https://kippt.com/">
+                            <img src="../,,./../assets/default/img/kippt-150.png" alt="Kippt"></a></h1>
+                    <a href="https://kippt.com/signup" class="btn" id="header-action">Sign Up</a>
+                </div>
+                <div id="login">
+                    <form method="POST" id="auth-form">
+                    <div style="display: none">
+                    </div>
+                    <h2>
+                        Sign in</h2>
+                    <div class="all-errors">
+                    </div>
+                    <div class="clearfix">
+                        <label for="username">
+                            Username</label>
+                        <div class="input">
+                            <input id="id_username" name="username" maxlength="30" type="text"></div>
+                    </div>
+                    <div class="clearfix">
+                        <label for="id_password">
+                            Password</label>
+                        <div class="input">
+                            <input name="password" id="id_password" type="password"></div>
+                    </div>
+                     <div class="clearfix">
+                        <label for="entity_code">
+                            Entity code</label>
+                        <div class="input">
+                            <input id="id_entitycode" name="entitycode" maxlength="30" type="text"></div>
+                    </div>
+                    <div class="actions clearfix">
+                        <input value="Sign In" class="btn" type="submit">
+                        <a href="#" class="forgot-password" style="float: left;">
+                            Forgot your password?</a>
+                    </div>
+                    </form>
+                    <hr>
+                </div>
+                <footer class="footer">
+                <a href="#">About</a>
+                <a href="mailto:pulak.sinha@researchsqr.com">Contact</a>
+                <a href="#" target="_blank">
+                        <img src="/assets/default/img/twitter_newbird_blue.png"
+                            alt="twitter" width="20" height="20" />
+                </a>
+
+            </footer>
+            </div>
+        </div>
+    </div>
+</body>
