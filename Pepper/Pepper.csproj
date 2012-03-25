@@ -70,7 +70,6 @@
     <Compile Include="Areas\Public\PublicAreaRegistration.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\FundController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Areas\Public\Controllers\AccountController.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Global.asax.cs">
@@ -103,13 +102,21 @@
     <Content Include="assets\default\img\html-bg.png" />
     <Content Include="assets\default\img\icon-link.png" />
     <Content Include="assets\default\img\icons-list.png" />
+    <Content Include="assets\default\img\icon_plus.png" />
     <Content Include="assets\default\img\kippt-150.png" />
     <Content Include="assets\default\img\screen-kippt.jpg" />
     <Content Include="assets\default\img\section.png" />
     <Content Include="assets\default\img\show_more.gif" />
     <Content Include="assets\default\img\show_more_arrow.gif" />
     <Content Include="assets\default\img\show_more_expanded.gif" />
+    <Content Include="assets\default\img\table_grid_th.jpg" />
+    <Content Include="assets\default\img\twitter_newbird_blue.png" />
     <Content Include="assets\default\js\application.js" />
+    <Content Include="assets\default\js\dropdown.js" />
+    <Content Include="assets\default\js\g.pie-min.js" />
+    <Content Include="assets\default\js\g.raphael-min.js" />
+    <Content Include="assets\default\js\jquery-1.7.1.min.js" />
+    <Content Include="assets\default\js\raphael-min.js" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -245,7 +252,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>50666</DevelopmentServerPort>
+          <DevelopmentServerPort>50800</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

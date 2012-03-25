@@ -39,6 +39,20 @@ namespace Pepper.Areas.Public.Controllers {
         // GET: /Account/LogOn
         [HttpGet]
         public ActionResult Login() {
+            //If you are trying to map a default route to an MVC 3 app with areas, your global.asax file might have something like this:
+            //routes.MapRoute(
+            //       "Default",
+            //       "{area}/{controller}/{action}/{id}",
+            //       new { area = "MyArea", controller = "Home", action = "Index", id = UrlParameter.Optional }
+            //);
+
+            //If you go to your app root in the URL, you may get a runtime error like this:
+            //The view 'Index' or its master was not found or no view engine supports the searched locations. The following locations were searched:
+            //For some reason, the view engine does not appear to look in the area folder for the view file the same as if you type in the whole link. The strange thing is the code reaches the controller action. Here is the fix: 
+
+            if (!this.ControllerContext.RouteData.DataTokens.ContainsKey("area")) {
+                this.ControllerContext.RouteData.DataTokens.Add("area", "Public");
+            }
             return View();
         }
 
